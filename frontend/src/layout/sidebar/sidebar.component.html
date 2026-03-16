@@ -1,0 +1,28 @@
+<aside class="w-64 bg-gray-900 text-white p-4 min-h-screen">
+  <h2 class="text-lg font-semibold mb-4">Menu</h2>
+
+  <!-- USER -->
+  <nav *ngIf="user.role === 'USER'" class="space-y-2">
+    <a class="block p-2 hover:bg-gray-700 rounded">Dashboard</a>
+    <a class="block p-2 hover:bg-gray-700 rounded">My Policies</a>
+    <a class="block p-2 hover:bg-gray-700 rounded">My Claims</a>
+    <a class="block p-2 hover:bg-gray-700 rounded">AI Insights</a>
+    <a class="block p-2 hover:bg-gray-700 rounded">Profile</a>
+  </nav>
+
+  <!-- EMPLOYEE -->
+  <nav *ngIf="user.role === 'EMPLOYEE'" class="space-y-2">
+    <a class="block p-2 hover:bg-gray-700 rounded">Claims Review</a>
+    <a class="block p-2 hover:bg-gray-700 rounded">Policy Approval</a>
+    <a class="block p-2 hover:bg-gray-700 rounded">Fraud Detection</a>
+    <a class="block p-2 hover:bg-gray-700 rounded">Reports</a>
+  </nav>
+
+  <!-- HR -->
+  <nav *ngIf="user.role === 'HR'" class="space-y-2">
+    <a class="block p-2 hover:bg-gray-700 rounded">Employees</a>
+    <a class="block p-2 hover:bg-gray-700 rounded">Roles & Access</a>
+    <a class="block p-2 hover:bg-gray-700 rounded">Analytics</a>
+    <a class="block p-2 hover:bg-gray-700 rounded">System Settings</a>
+  </nav>
+</aside>

@@ -1,0 +1,37 @@
+<app-sidebar></app-sidebar>
+
+<div class="flex min-h-screen">
+
+  <aside class="w-64 bg-gray-900 text-white p-4">
+    <h2 class="text-lg font-semibold mb-4">Employee Menu</h2>
+    <nav class="space-y-2">
+      <a class="block p-2 hover:bg-gray-700 rounded">Claims Review</a>
+      <a class="block p-2 hover:bg-gray-700 rounded">Policy Approval</a>
+      <a class="block p-2 hover:bg-gray-700 rounded">Fraud Detection</a>
+      <a class="block p-2 hover:bg-gray-700 rounded">Reports</a>
+    </nav>
+  </aside>
+
+  <main class="flex-1 bg-gray-50">
+
+    <header class="flex justify-between items-center p-4 bg-white shadow">
+      <h1 class="text-xl font-semibold text-blue-700">InsurAI – Employee</h1>
+      <span class="text-sm text-gray-600">Welcome {{ user?.name }}</span>
+    </header>
+
+    <section class="p-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white p-4 rounded shadow">Pending Claims: 12</div>
+        <div class="bg-white p-4 rounded shadow">Reviewed Today: 8</div>
+        <div class="bg-white p-4 rounded shadow text-red-600">Fraud Alerts: 2</div>
+        <div class="bg-white p-4 rounded shadow">AI Accuracy: 94%</div>
+      </div>
+
+      <div class="bg-white p-4 rounded shadow">
+        <h3 class="font-semibold mb-3">Claims Queue</h3>
+        <p class="text-sm">Review and approve claims</p>
+      </div>
+    </section>
+
+  </main>
+</div>
