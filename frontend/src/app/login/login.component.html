@@ -1,0 +1,214 @@
+
+
+<!-- <div class="min-h-screen flex"> -->
+
+  <!-- LEFT PANEL -->
+  <!--<div class="hidden md:flex w-1/2 bg-gradient-to-br from-blue-600 to-purple-700 text-white p-12 flex-col justify-center">
+    
+    <h1 class="text-3xl font-medium mb-6">InsurAI</h1>
+    <p class="mb-10 opacity-90">
+      Corporate Policy Automation System
+    </p>
+
+    <div class="space-y-4">
+      <div class="bg-white/10 p-4 rounded-xl">
+        🔐 Enterprise Security <br />
+        <span class="text-sm opacity-80">Bank-grade encryption</span>
+      </div>
+
+      <div class="bg-white/10 p-4 rounded-xl">
+        ⚙️ Smart Policy Management <br />
+        <span class="text-sm opacity-80">Centralized platform</span>
+      </div>
+
+      <div class="bg-white/10 p-4 rounded-xl">
+        🤖 AI-Powered Compliance <br />
+        <span class="text-sm opacity-80">Risk detection</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <!-- <div class="w-full md:w-1/2 flex items-center justify-center bg-gray-50">
+
+    <div class="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl">
+
+      <h2 class="text-2xl font-medium mb-2">
+        {{ isLogin ? 'Welcome Back' : 'Create Account' }}
+      </h2>
+
+      <p class="text-gray-500 mb-6">
+        {{ isLogin ? 'Sign in to your account' : 'Register a new account' }}
+      </p>
+
+     
+
+<h2>Login</h2>
+
+<form (ngSubmit)="handleSubmit()">
+
+  <div>
+    <input
+      type="text"
+      placeholder="Full Name"
+      [(ngModel)]="fullName"
+      name="fullName"
+      required
+    />
+  </div>
+
+  <div>
+    <input
+      type="email"
+      placeholder="Email"
+      [(ngModel)]="email"
+      name="email"
+      required
+    />
+  </div>
+
+  <div>
+    <input
+      type="password"
+      placeholder="Password"
+      [(ngModel)]="password"
+      name="password"
+      required
+    />
+  </div>
+
+  <div>
+    <select [(ngModel)]="selectedRole" name="role">
+      <option value="USER">User</option>
+      <option value="EMPLOYEE">Employee</option>
+      <option value="HR">HR</option>
+    </select>
+  </div>
+
+  <button type="submit">Login</button>
+
+</form>
+
+
+
+        <button
+          type="submit"
+          class="w-full py-2 text-white rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90 transition"
+        >
+          {{ isLogin ? 'Sign In' : 'Register' }}
+        </button>
+
+      </form>
+
+      <p
+        class="text-center text-blue-600 mt-4 cursor-pointer hover:underline"
+        (click)="isLogin = !isLogin"
+      >
+        {{ isLogin ? 'Don’t have an account? Register' : 'Already have an account? Sign In' }}
+      </p>
+     
+
+
+    </div>
+  </div>
+
+</div> --> 
+
+<div class="min-h-screen flex">
+
+  <!-- LEFT PANEL -->
+  <div class="hidden md:flex w-1/2 bg-gradient-to-br from-blue-600 to-purple-700 text-white p-12 flex-col justify-center">
+    <h1 class="text-3xl font-medium mb-6">InsurAI</h1>
+    <p class="mb-10 opacity-90">Corporate Policy Automation System</p>
+
+    <div class="space-y-4">
+      <div class="bg-white/10 p-4 rounded-xl">
+        🔐 Enterprise Security <br />
+        <span class="text-sm opacity-80">Bank-grade encryption</span>
+      </div>
+      <div class="bg-white/10 p-4 rounded-xl">
+        ⚙️ Smart Policy Management <br />
+        <span class="text-sm opacity-80">Centralized platform</span>
+      </div>
+      <div class="bg-white/10 p-4 rounded-xl">
+        🤖 AI-Powered Compliance <br />
+        <span class="text-sm opacity-80">Risk detection</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="w-full md:w-1/2 flex items-center justify-center bg-gray-50">
+    <div class="w-full max-w-md bg-white p-8 rounded-2xl shadow-xl">
+
+      <h2 class="text-2xl font-medium mb-2">
+        {{ isLogin ? 'Welcome Back' : 'Create Account' }}
+      </h2>
+
+      <p class="text-gray-500 mb-6">
+        {{ isLogin ? 'Sign in to your account' : 'Register a new account' }}
+      </p>
+
+      <!-- ✅ SINGLE FORM START -->
+      <div (ngSubmit)="handleSubmit()" novalidate>
+
+        <input
+          *ngIf="!isLogin"
+          type="text"
+          placeholder="Full Name"
+          [(ngModel)]="fullName"
+          name="fullName"
+          class="w-full mb-4 p-2 border rounded"
+        />
+
+        <input
+          type="email"
+          placeholder="Email"
+          [(ngModel)]="email"
+          name="email"
+          required
+          class="w-full mb-4 p-2 border rounded"
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          [(ngModel)]="password"
+          name="password"
+          required
+          class="w-full mb-4 p-2 border rounded"
+        />
+
+        <select
+          [(ngModel)]="selectedRole"
+          name="role"
+          class="w-full mb-4 p-2 border rounded"
+        >
+          <option value="USER">User</option>
+          <option value="EMPLOYEE">Employee</option>
+          <option value="HR">HR</option>
+        </select>
+
+        <!-- ✅ SUBMIT BUTTON INSIDE FORM -->
+        <button
+          type="submit"
+          class="w-full py-2 text-white rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90 transition"
+        >
+          {{ isLogin ? 'Sign In' : 'Register' }}
+        </button>
+
+      </div>
+      <!-- ✅ SINGLE FORM END -->
+
+      <p
+        class="text-center text-blue-600 mt-4 cursor-pointer hover:underline"
+        (click)="isLogin = !isLogin"
+      >
+        {{ isLogin ? 'Don’t have an account? Register' : 'Already have an account? Sign In' }}
+      </p>
+
+    </div>
+  </div>
+
+</div>

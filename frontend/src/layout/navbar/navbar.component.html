@@ -1,0 +1,11 @@
+<header class="flex items-center justify-between px-6 py-4 bg-white shadow">
+  <h1 class="text-xl font-semibold text-blue-700">InsurAI</h1>
+
+  <div class="flex items-center gap-4">
+    <span class="text-sm text-gray-600">Welcome {{ user?.name }}</span>
+    <span class="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-700">
+      {{ user?.role }}
+    </span>
+    <button (click)="logout()" class="text-red-500 text-sm">Logout</button>
+  </div>
+</header>

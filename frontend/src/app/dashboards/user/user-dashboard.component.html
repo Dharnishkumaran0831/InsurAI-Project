@@ -1,0 +1,73 @@
+<!-- USER DASHBOARD PAGE -->
+<div class="flex min-h-screen">
+
+  <!-- SIDEBAR -->
+  <aside class="w-64 bg-gray-900 text-white p-4">
+    <h2 class="text-lg font-semibold mb-4">User Menu</h2>
+    <nav class="space-y-2">
+      <a class="block p-2 hover:bg-gray-700 rounded">Dashboard</a>
+      <a class="block p-2 hover:bg-gray-700 rounded">My Policies</a>
+      <a class="block p-2 hover:bg-gray-700 rounded">My Claims</a>
+      <a class="block p-2 hover:bg-gray-700 rounded">AI Insights</a>
+      <a class="block p-2 hover:bg-gray-700 rounded">Profile</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 bg-gray-50">
+
+    <!-- TOP NAVBAR -->
+    <header class="flex justify-between items-center p-4 bg-white shadow">
+      <h1 class="text-xl font-semibold text-blue-700">InsurAI – User</h1>
+      <div class="flex items-center gap-4">
+        <span class="text-sm text-gray-600">Welcome {{ user?.name }}</span>
+        <span class="px-3 py-1 text-xs rounded-full bg-blue-100 text-blue-700">
+          {{ user?.role }}
+        </span>
+      </div>
+    </header>
+
+    <!-- DASHBOARD CONTENT -->
+    <section class="p-6">
+
+      <!-- SUMMARY CARDS -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white p-4 rounded shadow">Active Policies: <b>3</b></div>
+        <div class="bg-white p-4 rounded shadow">Claims Filed: <b>1</b></div>
+        <div class="bg-white p-4 rounded shadow text-green-600">Risk: Low</div>
+        <div class="bg-white p-4 rounded shadow">Premium Due: ₹12,000</div>
+      </div>
+
+      <!-- POLICIES -->
+      <div class="bg-white p-4 rounded shadow mb-6">
+        <h3 class="font-semibold mb-3">My Policies</h3>
+        <p class="text-sm text-gray-500">Health, Vehicle, Life</p>
+      </div>
+
+      <!-- AI INSIGHTS -->
+      <div class="bg-blue-50 p-4 rounded shadow">
+        <h3 class="font-semibold mb-2">🧠 AI Insights</h3>
+        <ul class="list-disc ml-5 text-sm">
+          <li>Your health policy risk is LOW</li>
+          <li>Vehicle claim authenticity: 92%</li>
+
+          <li>Upgrade suggestion available</li>
+        </ul>
+        <div class="flex">
+  <app-sidebar></app-sidebar>
+
+  <div class="flex-1">
+    <app-navbar></app-navbar>
+
+    <!-- 👇 NESTED PAGES RENDER HERE -->
+    <router-outlet></router-outlet>
+
+  </div>
+</div>
+
+      </div>
+
+    </section>
+  </main>
+
+</div>
