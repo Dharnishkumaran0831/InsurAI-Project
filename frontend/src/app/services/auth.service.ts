@@ -7,7 +7,7 @@ import { LoginResponse } from '../models/login-response';
 })
 export class AuthService {
 
-  private BASE_URL = 'http://localhost:8080/api/auth';
+  private BASE_URL = 'https://insurai-backend-rarh.onrender.com/api/auth';
 
   constructor(private http: HttpClient) {}
 
@@ -20,11 +20,11 @@ export class AuthService {
   }
 
   // REGISTER
-register(data: any) {
-  return this.http.post(
-    'http://localhost:8080/api/auth/register',
-    data,
-    { responseType: 'text' } // ⭐ IMPORTANT
-  );
-}
+  register(data: any) {
+    return this.http.post(
+      'https://insurai-backend-rarh.onrender.com/api/auth/register',
+      data,
+      { responseType: 'text' } // ⭐ IMPORTANT
+    );
+  }
 }

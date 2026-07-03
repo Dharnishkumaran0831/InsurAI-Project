@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  private API = 'http://localhost:8080/api';
+  private API = 'https://insurai-backend-rarh.onrender.com/api';
 
   constructor(private http: HttpClient) {}
 
