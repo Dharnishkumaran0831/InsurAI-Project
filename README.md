@@ -1,6 +1,8 @@
 
 🛡️ InsurAI – Corporate Policy Automation System
 
+### 🚀 Live Demo: [https://frontend-eight-nu-66.vercel.app](https://frontend-eight-nu-66.vercel.app)
+
 InsurAI is a full-stack insurance management platform that automates corporate insurance policy creation, validation, claims processing, and renewals using modern web technologies. The system reduces manual effort, improves accuracy, and provides secure role-based access for users, employees, and HR/admins.
 
 📌 Problem Statement
