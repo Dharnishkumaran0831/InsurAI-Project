@@ -228,21 +228,23 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6" autoComplete="off">
-              {/* Full Name Field - Show for both login and registration */}
-              <div>
-                <label className="block text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
-                  <input
-                    type="text"
-                    placeholder="John Doe"
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition placeholder:text-gray-400 dark:placeholder:text-gray-500"
-                    required
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                  />
+              {/* Full Name Field - Show only for registration */}
+              {!isLogin && (
+                <div>
+                  <label className="block text-gray-700 dark:text-gray-300 mb-2">Full Name</label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
+                    <input
+                      type="text"
+                      placeholder="John Doe"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                      required
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div>
                 <label className="block text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
@@ -294,18 +296,21 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-gray-700 dark:text-gray-300 mb-2">Select Role</label>
-                <select
-                  value={selectedRole}
-                  onChange={(e) => setSelectedRole(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-                >
-                  <option value="user">USER</option>
-                  <option value="employee">Employee</option>
-                  <option value="hr">HR Manager</option>
-                </select>
-              </div>
+              {/* Role Selection - Show only for registration */}
+              {!isLogin && (
+                <div>
+                  <label className="block text-gray-700 dark:text-gray-300 mb-2">Select Role</label>
+                  <select
+                    value={selectedRole}
+                    onChange={(e) => setSelectedRole(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  >
+                    <option value="user">USER</option>
+                    <option value="employee">Employee</option>
+                    <option value="hr">HR Manager</option>
+                  </select>
+                </div>
+              )}
 
               {isLogin && (
                 <div className="flex items-center justify-between">
