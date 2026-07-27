@@ -162,7 +162,11 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     }
 
   } catch (error) {
-    alert("Invalid email or password ❌");
+    if (isLogin) {
+      alert("Invalid email or password ❌");
+    } else {
+      alert("Registration failed. The email might already be registered, or there was a server error ❌");
+    }
   }
 };
 
