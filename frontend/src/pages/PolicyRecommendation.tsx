@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Layout from '../components/Layout';
 import { Sparkles, FileText, Download, CheckCircle, TrendingUp } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
+import { getPolicyRecommendation } from '../services/api';
 
 export default function PolicyRecommendation() {
   const location = useLocation();
@@ -27,7 +28,7 @@ export default function PolicyRecommendation() {
     'Wellness Programs',
   ];
 
-  const recommendedPolicies = [
+  const [recommendedPolicies, setRecommendedPolicies] = useState<any[]>([
     {
       id: 1,
       name: 'Comprehensive Health Insurance',
@@ -70,7 +71,7 @@ export default function PolicyRecommendation() {
         'Replacement guarantee',
       ],
     },
-  ];
+  ]);
 
   const handleCoverageToggle = (option: string) => {
     if (coverageNeeds.includes(option)) {
@@ -80,12 +81,26 @@ export default function PolicyRecommendation() {
     }
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     setGenerating(true);
-    setTimeout(() => {
+    try {
+      const profile = {
+        employeeType,
+        department,
+        coverageNeeds
+      };
+      const data = await getPolicyRecommendation(profile);
+      if (Array.isArray(data)) {
+        setRecommendedPolicies(data);
+        setGenerated(true);
+      } else {
+        console.error("AI returned invalid recommendation format", data);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
       setGenerating(false);
-      setGenerated(true);
-    }, 2000);
+    }
   };
 
   return (

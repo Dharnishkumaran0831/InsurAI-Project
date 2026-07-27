@@ -22,35 +22,36 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://insurai-backend-rarh.onrender.com/api/auth",
+  baseURL: "https://insurai-backend-rarh.onrender.com/api",
   headers: {
     "Content-Type": "application/json",
   },
 });
 
 export const login = async (email: string, password: string) => {
-  const res = await API.post("/login", { email, password });
+  const res = await API.post("/auth/login", { email, password });
   return res.data;
 };
 
-// export const register = async (
-//   email: string,
-//   password: string,
-//   role: string
-// ) => {
-//   const res = await API.post("/register", { email, password, role });
-//   return res.data;
-// };
 export const register = async (data: {
   fullName: string;
   email: string;
   password: string;
   role: string;
 }) => {
-  const res = await API.post("/register", data);
+  const res = await API.post("/auth/register", data);
   return res.data;
 };
 
+export const checkCompliance = async (policyText: string, fileName: string, employeeEmail: string) => {
+  const res = await API.post("/ai/compliance-check", { policyText, fileName, employeeEmail });
+  return res.data;
+};
+
+export const getPolicyRecommendation = async (profile: any) => {
+  const res = await API.post("/ai/policy-recommendation", { profile });
+  return res.data;
+};
 
 export default API;
 

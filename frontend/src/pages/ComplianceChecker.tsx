@@ -3,6 +3,7 @@ import Layout from '../components/Layout';
 import { Upload, FileText, AlertTriangle, CheckCircle, XCircle, Sparkles, File, Trash2, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import { addComplianceRecord } from '../data/complianceRecords';
+import { checkCompliance } from '../services/api';
 
 interface ComplianceCheckerProps {
   userName?: string;
@@ -20,7 +21,7 @@ export default function ComplianceChecker({ userName, userEmail }: ComplianceChe
   // Determine role based on sessionStorage
   const role = sessionStorage.getItem('userRole') === 'hr' ? 'hr' : 'employee';
 
-  const complianceResults = {
+  const [complianceResults, setComplianceResults] = useState<any>({
     score: 78,
     missingClauses: [
       { id: 1, clause: 'Grievance Redressal Mechanism', severity: 'high', description: 'No clear process defined for handling employee grievances' },
@@ -37,7 +38,7 @@ export default function ComplianceChecker({ userName, userEmail }: ComplianceChe
       { id: 3, title: 'Strengthen Dispute Resolution', description: 'Add detailed arbitration and mediation procedures' },
       { id: 4, title: 'Include Force Majeure', description: 'Add force majeure clause for unforeseen circumstances' },
     ],
-  };
+  });
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -88,7 +89,7 @@ export default function ComplianceChecker({ userName, userEmail }: ComplianceChe
     toast.info('File removed');
   };
 
-  const handleAnalyze = () => {
+  const handleAnalyze = async () => {
     if (activeTab === 'upload' && !uploadedFile) {
       toast.error('Please upload a document first');
       return;
@@ -101,12 +102,36 @@ export default function ComplianceChecker({ userName, userEmail }: ComplianceChe
 
     setAnalyzing(true);
     toast.info('AI is analyzing your document for compliance...');
-    
-    setTimeout(() => {
+
+    try {
+      let textToAnalyze = policyText;
+      let nameOfFile = 'Pasted Text';
+
+      if (activeTab === 'upload' && uploadedFile) {
+        nameOfFile = uploadedFile.name;
+        textToAnalyze = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = (e) => resolve(e.target?.result as string || '');
+          reader.onerror = (e) => reject(e);
+          reader.readAsText(uploadedFile);
+        });
+      }
+
+      const data = await checkCompliance(textToAnalyze, nameOfFile, userEmail || 'anonymous@company.com');
+      
+      if (data.error) {
+        toast.error('AI Analysis failed to parse structured results');
+      } else {
+        setComplianceResults(data);
+        setAnalyzed(true);
+        toast.success('Compliance analysis complete!');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('Failed to communicate with AI compliance service');
+    } finally {
       setAnalyzing(false);
-      setAnalyzed(true);
-      toast.success('Compliance analysis complete!');
-    }, 2500);
+    }
   };
 
   const handleDownloadReport = () => {
