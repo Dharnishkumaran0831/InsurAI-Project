@@ -293,7 +293,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition cursor-pointer"
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -330,7 +330,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition shadow-lg hover:shadow-xl"
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition shadow-lg hover:shadow-xl cursor-pointer"
               >
                 {isLogin ? 'Sign In' : 'Create Account'}
               </button>
@@ -339,7 +339,7 @@ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 <button
                   type="button"
                   onClick={() => setIsLogin(!isLogin)}
-                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition"
+                  className="text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition cursor-pointer"
                 >
                   {isLogin ? "Don't have an account? " : 'Already have an account? '}
                   <span className="text-blue-600 dark:text-blue-400">{isLogin ? 'Register' : 'Sign In'}</span>
