@@ -16,6 +16,8 @@ import com.insurai.backend.entity.User;
 import com.insurai.backend.repository.UserRepository;
 import com.insurai.backend.service.UserService;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*") // frontend access
@@ -107,6 +109,16 @@ public LoginResponse login(@RequestBody LoginRequest request) {
             request.getEmail(),
             request.getPassword()
     );
+}
+
+@GetMapping("/delete-user-test")
+public String deleteUserTest(@RequestParam String email) {
+    Optional<User> user = userRepository.findByEmail(email);
+    if (user.isPresent()) {
+        userRepository.delete(user.get());
+        return "User deleted successfully: " + email;
+    }
+    return "User not found: " + email;
 }
 
 }
