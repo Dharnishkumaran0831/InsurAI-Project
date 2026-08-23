@@ -1,9 +1,14 @@
+# 🛡️ InsurAI – Corporate Policy Automation System
 
-🛡️ InsurAI – Corporate Policy Automation System
+### 🚀 Live Demo
+[View Live Demo](https://frontend-eight-nu-66.vercel.app)
 
-### 🚀 Live Demo: [https://frontend-eight-nu-66.vercel.app](https://frontend-eight-nu-66.vercel.app)
+InsurAI is a full-stack corporate insurance policy management system developed during the **Infosys Springboard Internship Program**.
 
-InsurAI is a full-stack insurance management platform that automates corporate insurance policy creation, validation, claims processing, and renewals using modern web technologies. The system reduces manual effort, improves accuracy, and provides secure role-based access for users, employees, and HR/admins.
+The platform helps automate corporate insurance workflows such as policy applications, policy verification, claim submission, and policy tracking.
+
+> **My Role:** Frontend Developer — React.js, TypeScript, UI development, routing, and REST API integration.
+
 
 📌 Problem Statement
 
@@ -183,14 +188,16 @@ Team Project
 ### Maintained By
 **Dharnish Kumaran**
 
-### My Contributions
-- Developed frontend user interface using **React.js** and **TypeScript**.
-- Built reusable UI components and application pages.
-- Implemented client-side routing using **React Router**.
-- Integrated frontend with backend REST APIs using **Axios**.
-- Worked with the team to test and improve the user interface.
+## 👨‍💻 My Contributions
 
-> **Note:** This repository is a maintained copy of a team project completed during the Infosys Springboard Internship Program. It is maintained for learning, demonstration, and portfolio purposes.
+This was a team project developed during the Infosys Springboard Internship Program. My primary contribution was on the frontend.
+
+- Developed user interfaces using React.js and TypeScript
+- Built reusable UI components
+- Implemented client-side routing using React Router
+- Integrated frontend with backend REST APIs using Axios
+- Developed and improved application pages and user workflows
+- Worked with the team to test and refine the user interface
 ⭐ Conclusion
 
 InsurAI is a secure, scalable, and efficient insurance automation platform that modernizes corporate insurance workflows using Spring Boot, React, REST APIs, and JWT authentication.
