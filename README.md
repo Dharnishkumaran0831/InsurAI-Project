@@ -201,5 +201,8 @@ This was a team project developed during the Infosys Springboard Internship Prog
 ⭐ Conclusion
 
 InsurAI is a secure, scalable, and efficient insurance automation platform that modernizes corporate insurance workflows using Spring Boot, React, REST APIs, and JWT authentication.
+## 📸 Screenshots
+### 🔐 Login Page
 
+![InsurAI Login Page](screenshots/login.png)
 
