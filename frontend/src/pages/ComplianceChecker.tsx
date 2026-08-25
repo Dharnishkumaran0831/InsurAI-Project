@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import Layout from '../components/Layout';
-import { Upload, FileText, AlertTriangle, CheckCircle, XCircle, Sparkles, File, Trash2, Send } from 'lucide-react';
+import { Upload, FileText, AlertTriangle, CheckCircle, XCircle, Sparkles, File, Trash2, Send, Bot } from 'lucide-react';
 import { toast } from 'sonner';
 import { addComplianceRecord } from '../data/complianceRecords';
+import { analyzePolicy } from '../services/geminiApi';
 
 interface ComplianceCheckerProps {
   userName?: string;
@@ -16,9 +17,11 @@ export default function ComplianceChecker({ userName, userEmail }: ComplianceChe
   const [policyText, setPolicyText] = useState('');
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [dragActive, setDragActive] = useState(false);
+  const [aiAnalysisText, setAiAnalysisText] = useState('');
 
-  // Determine role based on sessionStorage
-  const role = sessionStorage.getItem('userRole') === 'hr' ? 'hr' : 'employee';
+  // Determine role based on localStorage (JWT-based auth)
+  const storedRole = localStorage.getItem('role');
+  const role = storedRole === 'HR' ? 'hr' : 'employee';
 
   const complianceResults = {
     score: 78,
@@ -88,7 +91,7 @@ export default function ComplianceChecker({ userName, userEmail }: ComplianceChe
     toast.info('File removed');
   };
 
-  const handleAnalyze = () => {
+  const handleAnalyze = async () => {
     if (activeTab === 'upload' && !uploadedFile) {
       toast.error('Please upload a document first');
       return;
@@ -100,13 +103,25 @@ export default function ComplianceChecker({ userName, userEmail }: ComplianceChe
     }
 
     setAnalyzing(true);
-    toast.info('AI is analyzing your document for compliance...');
-    
-    setTimeout(() => {
-      setAnalyzing(false);
+    setAiAnalysisText('');
+    toast.info('🤖 Gemini AI is analyzing your document for compliance...');
+
+    try {
+      const textToAnalyze = activeTab === 'paste'
+        ? policyText
+        : `Policy document: ${uploadedFile?.name}. Please perform a general compliance analysis for a corporate insurance policy.`;
+
+      const aiResult = await analyzePolicy(textToAnalyze);
+      setAiAnalysisText(aiResult);
       setAnalyzed(true);
-      toast.success('Compliance analysis complete!');
-    }, 2500);
+      toast.success('✅ Compliance analysis complete!');
+    } catch (error) {
+      // Fallback to mock analysis if Gemini API fails
+      setAnalyzed(true);
+      toast.warning('AI unavailable - showing standard compliance analysis');
+    } finally {
+      setAnalyzing(false);
+    }
   };
 
   const handleDownloadReport = () => {
@@ -345,6 +360,24 @@ End of Report
                 </div>
               </div>
             </div>
+
+            {/* Gemini AI Analysis Text */}
+            {aiAnalysisText && (
+              <div className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-xl border border-purple-200 dark:border-purple-800 p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center">
+                    <Bot className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 dark:text-white">Gemini AI Analysis</h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Powered by Google Gemini AI</p>
+                  </div>
+                </div>
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-purple-100 dark:border-purple-800">
+                  <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">{aiAnalysisText}</p>
+                </div>
+              </div>
+            )}
 
             {/* Missing Clauses */}
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">

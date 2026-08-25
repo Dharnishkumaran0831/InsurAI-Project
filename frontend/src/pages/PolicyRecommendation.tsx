@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import Layout from '../components/Layout';
-import { Sparkles, FileText, Download, CheckCircle, TrendingUp } from 'lucide-react';
+import { Sparkles, FileText, Download, CheckCircle, TrendingUp, Bot } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
+import { recommendPolicies } from '../services/geminiApi';
 
 export default function PolicyRecommendation() {
   const location = useLocation();
@@ -10,6 +11,7 @@ export default function PolicyRecommendation() {
   const [employeeType, setEmployeeType] = useState('');
   const [department, setDepartment] = useState('');
   const [coverageNeeds, setCoverageNeeds] = useState<string[]>([]);
+  const [aiRecommendationText, setAiRecommendationText] = useState('');
 
   // Determine role based on current route
   const role = location.pathname.includes('/hr') ? 'hr' : 
@@ -80,12 +82,18 @@ export default function PolicyRecommendation() {
     }
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     setGenerating(true);
-    setTimeout(() => {
+    setAiRecommendationText('');
+    try {
+      const aiResult = await recommendPolicies({ type: employeeType, department, coverageNeeds });
+      setAiRecommendationText(aiResult);
+    } catch {
+      // Use static recommendations if AI unavailable
+    } finally {
       setGenerating(false);
       setGenerated(true);
-    }, 2000);
+    }
   };
 
   return (
@@ -191,7 +199,7 @@ export default function PolicyRecommendation() {
                   <CheckCircle className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                  <p className="text-green-900 mb-2">AI Analysis Complete!</p>
+                  <p className="text-green-900 font-semibold mb-1">AI Analysis Complete!</p>
                   <p className="text-green-800">
                     Based on the employee profile ({employeeType} in {department}) and selected coverage needs,
                     we've identified {recommendedPolicies.length} highly suitable policies.
@@ -199,6 +207,24 @@ export default function PolicyRecommendation() {
                 </div>
               </div>
             </div>
+
+            {/* Gemini AI Recommendations */}
+            {aiRecommendationText && (
+              <div className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-xl border border-purple-200 dark:border-purple-800 p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl flex items-center justify-center">
+                    <Bot className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 dark:text-white">Gemini AI Recommendations</h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Personalized by Google Gemini AI</p>
+                  </div>
+                </div>
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-purple-100 dark:border-purple-800">
+                  <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">{aiRecommendationText}</p>
+                </div>
+              </div>
+            )}
 
             <div>
               <div className="flex items-center justify-between mb-4">
