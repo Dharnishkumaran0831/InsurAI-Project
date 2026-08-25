@@ -3,8 +3,11 @@ node_modules/
 frontend/node_modules/
 backend/node_modules/
 
-# Environment
+# Environment - Don't commit real secrets
+# frontend/.env is tracked with placeholder key only
 .env
+!frontend/.env
+!frontend/.env.example
 
 # Build
 dist/

@@ -1,20 +1,27 @@
 import Layout from '../components/Layout';
 import DashboardCard from '../components/DashboardCard';
-import { FileText, Download, MessageSquare, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import { FileText, Download, MessageSquare, Clock, CheckCircle, AlertCircle, Sparkles, Send, Bot, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { getPoliciesForUser, getPendingAcknowledgments, type Policy } from '../data/policyData';
+import { answerPolicyQuery } from '../services/geminiApi';
 
 interface EmployeeDashboardProps {
   userName?: string;
   userEmail?: string;
 }
 
-export default function EmployeeDashboard({ userName = 'Employee', userEmail = 'john.anderson@company.com' }: EmployeeDashboardProps) {
+export default function EmployeeDashboard({
+  userName = 'Employee',
+  userEmail = 'employee@company.com',
+}: EmployeeDashboardProps) {
   const [policies, setPolicies] = useState<Policy[]>([]);
   const [pendingCount, setPendingCount] = useState(0);
+  const [showAiChat, setShowAiChat] = useState(false);
+  const [aiQuery, setAiQuery] = useState('');
+  const [aiResponse, setAiResponse] = useState('');
+  const [aiLoading, setAiLoading] = useState(false);
 
-  // Load policies assigned to the current user
   useEffect(() => {
     if (userEmail) {
       const userPolicies = getPoliciesForUser(userEmail);
@@ -44,9 +51,6 @@ export default function EmployeeDashboard({ userName = 'Employee', userEmail = '
   };
 
   const handleDownloadPDF = (policyName: string) => {
-    toast.success(`Preparing ${policyName} for download...`);
-    
-    // Create a simple PDF content as text
     const pdfContent = `
 ===========================================
 ${policyName}
@@ -54,8 +58,6 @@ ${policyName}
 
 Policy Document
 Generated on: ${new Date().toLocaleDateString()}
-
-This is a policy document for ${policyName}.
 
 Company: InsurAI - Corporate Policy Automation System
 Document Type: Policy Document
@@ -76,39 +78,139 @@ End of Document
 ===========================================
     `.trim();
 
-    // Create a Blob with the PDF content
     const blob = new Blob([pdfContent], { type: 'application/pdf' });
     const url = window.URL.createObjectURL(blob);
-    
-    // Create a temporary anchor element and trigger download
     const link = document.createElement('a');
     link.href = url;
     link.download = `${policyName.replace(/\s+/g, '_')}.pdf`;
     document.body.appendChild(link);
     link.click();
-    
-    // Clean up
     document.body.removeChild(link);
     window.URL.revokeObjectURL(url);
-    
     toast.success('PDF downloaded successfully!');
   };
+
+  const handleAiQuery = async () => {
+    if (!aiQuery.trim()) return;
+    setAiLoading(true);
+    setAiResponse('');
+    try {
+      const response = await answerPolicyQuery(
+        aiQuery,
+        `Employee ${userName} from ${userEmail} is asking about company policies.`
+      );
+      setAiResponse(response);
+    } catch {
+      setAiResponse('AI assistant is currently unavailable. Please contact your HR department for help.');
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  const quickPrompts = [
+    'What is my health insurance coverage?',
+    'How do I apply for leave?',
+    'What are the travel policy guidelines?',
+    'How to claim reimbursements?',
+  ];
 
   return (
     <Layout role="employee" userName={userName} userEmail={userEmail}>
       <div className="space-y-6">
-        {/* Header with Welcome */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 text-white">
-          <div className="flex items-center justify-between">
+        {/* Welcome Header */}
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-6 text-white relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-32 translate-x-32" />
+          <div className="relative z-10 flex items-center justify-between">
             <div>
-              <h1 className="mb-2">Welcome back, {userName}!</h1>
-              <p className="opacity-90">You have {pendingCount} pending policy acknowledgments and 1 renewal reminder</p>
+              <h1 className="text-2xl font-bold mb-1">Welcome back, {userName}! 👋</h1>
+              <p className="opacity-90">
+                You have <span className="font-semibold">{pendingCount} pending</span> policy acknowledgments
+                and <span className="font-semibold">{renewalReminders.length} renewal</span> reminders.
+              </p>
             </div>
-            <div className="hidden md:block w-24 h-24 bg-white/20 rounded-full flex items-center justify-center">
-              <CheckCircle className="w-12 h-12" />
+            <div className="hidden md:flex items-center space-x-3">
+              <button
+                onClick={() => setShowAiChat(!showAiChat)}
+                className="flex items-center space-x-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-lg hover:bg-white/30 transition border border-white/30"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span className="text-sm font-medium">AI Help</span>
+              </button>
+              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                <CheckCircle className="w-8 h-8" />
+              </div>
             </div>
           </div>
         </div>
+
+        {/* Gemini AI Chat Panel */}
+        {showAiChat && (
+          <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl border border-blue-200 dark:border-blue-800 p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+                  <Bot className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">AI Policy Assistant</h3>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Powered by Google Gemini AI • Ask anything about your policies</p>
+                </div>
+              </div>
+              <button onClick={() => setShowAiChat(false)} className="text-gray-400 hover:text-gray-600">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Quick prompts */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              {quickPrompts.map((prompt, i) => (
+                <button
+                  key={i}
+                  onClick={() => setAiQuery(prompt)}
+                  className="px-3 py-1.5 bg-white dark:bg-gray-800 border border-blue-200 dark:border-blue-700 text-blue-700 dark:text-blue-300 rounded-lg text-sm hover:bg-blue-50 dark:hover:bg-blue-900/30 transition"
+                >
+                  {prompt}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex space-x-3">
+              <input
+                type="text"
+                value={aiQuery}
+                onChange={(e) => setAiQuery(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleAiQuery()}
+                placeholder="Ask about your insurance policies, leave, reimbursements..."
+                className="flex-1 px-4 py-3 border border-blue-200 dark:border-blue-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              />
+              <button
+                onClick={handleAiQuery}
+                disabled={aiLoading || !aiQuery.trim()}
+                className="px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition disabled:opacity-50"
+              >
+                {aiLoading ? (
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                ) : (
+                  <Send className="w-5 h-5" />
+                )}
+              </button>
+            </div>
+
+            {aiResponse && (
+              <div className="mt-4 p-4 bg-white dark:bg-gray-800 rounded-lg border border-blue-100 dark:border-blue-800">
+                <div className="flex items-start space-x-3">
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-blue-700 dark:text-blue-300 mb-1">Gemini AI:</p>
+                    <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">{aiResponse}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -129,7 +231,7 @@ End of Document
             bgColor="from-amber-500 to-orange-600"
           />
           <DashboardCard
-            title="AI Compliance Checker"
+            title="AI Compliance Score"
             value="80%"
             icon={CheckCircle}
             trend="+5% this month"
@@ -150,7 +252,7 @@ End of Document
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
           <div className="flex items-center space-x-2 mb-4">
             <AlertCircle className="w-6 h-6 text-amber-600" />
-            <h3 className="text-gray-900 dark:text-white">Renewal Reminders</h3>
+            <h3 className="text-gray-900 dark:text-white font-semibold">Renewal Reminders</h3>
           </div>
           <div className="space-y-3">
             {renewalReminders.map((reminder) => (
@@ -159,12 +261,12 @@ End of Document
                 className="flex items-center justify-between p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg"
               >
                 <div>
-                  <p className="text-gray-900 dark:text-white">{reminder.policy}</p>
-                  <p className="text-gray-600 dark:text-gray-400">Due date: {reminder.dueDate}</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">{reminder.policy}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Due date: {reminder.dueDate}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-amber-700 dark:text-amber-400">{reminder.daysLeft} days left</p>
-                  <button className="text-blue-600 dark:text-blue-400 hover:underline">View Details</button>
+                  <p className="font-medium text-amber-700 dark:text-amber-400">{reminder.daysLeft} days left</p>
+                  <button className="text-sm text-blue-600 dark:text-blue-400 hover:underline">View Details</button>
                 </div>
               </div>
             ))}
@@ -173,12 +275,12 @@ End of Document
 
         {/* Assigned Policies */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-          <h3 className="text-gray-900 dark:text-white mb-4">My Assigned Policies</h3>
+          <h3 className="text-gray-900 dark:text-white font-semibold mb-4">My Assigned Policies</h3>
           {policies.length === 0 ? (
             <div className="text-center py-8">
               <FileText className="w-12 h-12 text-gray-400 dark:text-gray-600 mx-auto mb-3" />
               <p className="text-gray-600 dark:text-gray-400">No policies assigned to you yet.</p>
-              <p className="text-gray-500 dark:text-gray-500">Please contact HR for more information.</p>
+              <p className="text-sm text-gray-500 dark:text-gray-500">Please contact HR for more information.</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -192,11 +294,13 @@ End of Document
                       <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-gray-900 dark:text-white">{policy.name}</p>
-                      <p className="text-gray-600 dark:text-gray-400">Category: {policy.category} • Last updated: {policy.lastUpdated}</p>
+                      <p className="font-semibold text-gray-900 dark:text-white">{policy.name}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Category: {policy.category} • Last updated: {policy.lastUpdated}
+                      </p>
                       <div className="flex items-center space-x-2 mt-2">
                         <span
-                          className={`px-3 py-1 rounded-full ${
+                          className={`px-2 py-0.5 rounded-full text-xs font-medium ${
                             policy.status === 'Active'
                               ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
                               : 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400'
@@ -205,12 +309,12 @@ End of Document
                           {policy.status}
                         </span>
                         {policy.acknowledged ? (
-                          <span className="flex items-center space-x-1 text-green-600 dark:text-green-400">
+                          <span className="flex items-center space-x-1 text-green-600 dark:text-green-400 text-sm">
                             <CheckCircle className="w-4 h-4" />
                             <span>Acknowledged</span>
                           </span>
                         ) : (
-                          <span className="flex items-center space-x-1 text-amber-600 dark:text-amber-400">
+                          <span className="flex items-center space-x-1 text-amber-600 dark:text-amber-400 text-sm">
                             <AlertCircle className="w-4 h-4" />
                             <span>Pending Acknowledgment</span>
                           </span>
@@ -218,9 +322,9 @@ End of Document
                       </div>
                     </div>
                   </div>
-                  <div className="flex flex-col space-y-2">
+                  <div className="flex flex-col space-y-2 ml-4">
                     <button
-                      className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                      className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm"
                       onClick={() => handleDownloadPDF(policy.name)}
                     >
                       <Download className="w-4 h-4" />
@@ -228,7 +332,7 @@ End of Document
                     </button>
                     {!policy.acknowledged && (
                       <button
-                        className="px-4 py-2 border border-green-600 dark:border-green-500 text-green-600 dark:text-green-400 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 transition"
+                        className="px-4 py-2 border border-green-600 dark:border-green-500 text-green-600 dark:text-green-400 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 transition text-sm"
                         onClick={() => handleAcknowledge(policy.id)}
                       >
                         Acknowledge
@@ -243,10 +347,10 @@ End of Document
 
         {/* Submit Query Section */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-          <h3 className="text-gray-900 dark:text-white mb-4">Submit Policy Query</h3>
+          <h3 className="text-gray-900 dark:text-white font-semibold mb-4">Submit Policy Query to HR</h3>
           <div className="space-y-4">
             <div>
-              <label className="block text-gray-700 dark:text-gray-300 mb-2">Subject</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subject</label>
               <input
                 type="text"
                 placeholder="Enter query subject"
@@ -254,7 +358,7 @@ End of Document
               />
             </div>
             <div>
-              <label className="block text-gray-700 dark:text-gray-300 mb-2">Select Policy</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select Policy</label>
               <select className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none">
                 {policies.map((policy) => (
                   <option key={policy.id} value={policy.name}>
@@ -264,21 +368,24 @@ End of Document
               </select>
             </div>
             <div>
-              <label className="block text-gray-700 dark:text-gray-300 mb-2">Your Query</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Your Query</label>
               <textarea
                 rows={4}
                 placeholder="Describe your query in detail..."
                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
               />
             </div>
-            <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+            <button
+              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              onClick={() => toast.success('Query submitted to HR successfully!')}
+            >
               Submit Query
             </button>
           </div>
 
           {/* Recent Queries */}
           <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <h4 className="text-gray-900 dark:text-white mb-3">Recent Queries</h4>
+            <h4 className="font-semibold text-gray-900 dark:text-white mb-3">Recent Queries</h4>
             <div className="space-y-2">
               {recentQueries.map((query) => (
                 <div
@@ -286,11 +393,11 @@ End of Document
                   className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
                 >
                   <div>
-                    <p className="text-gray-900 dark:text-white">{query.subject}</p>
-                    <p className="text-gray-600 dark:text-gray-400">{query.date}</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">{query.subject}</p>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">{query.date}</p>
                   </div>
                   <span
-                    className={`px-3 py-1 rounded-full ${
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${
                       query.status === 'Answered'
                         ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
                         : 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400'
