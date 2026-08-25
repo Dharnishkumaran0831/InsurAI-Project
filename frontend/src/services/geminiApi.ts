@@ -1,8 +1,21 @@
 // Google Gemini AI Service
-// Free API key from: https://aistudio.google.com/app/apikey
+// API Key from: https://aistudio.google.com/app/apikey
 
 const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
-const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`;
+
+// Google AI Studio keys use x-goog-api-key header
+const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+
+function getUrl(): string {
+  return GEMINI_API_BASE;
+}
+
+function getHeaders(): Record<string, string> {
+  return {
+    'Content-Type': 'application/json',
+    'x-goog-api-key': GEMINI_API_KEY,
+  };
+}
 
 export interface GeminiMessage {
   role: 'user' | 'model';
@@ -12,40 +25,45 @@ export interface GeminiMessage {
 // Core function to call Gemini API
 export async function callGemini(prompt: string): Promise<string> {
   if (!GEMINI_API_KEY) {
-    return 'Gemini API key not configured. Please add VITE_GEMINI_API_KEY to your .env file.';
+    return '⚠️ Gemini API key not configured. Please add VITE_GEMINI_API_KEY to your .env file.';
   }
 
-  const response = await fetch(GEMINI_API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents: [
-        {
-          parts: [{ text: prompt }],
+  try {
+    const response = await fetch(getUrl(), {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0.7,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 1024,
         },
-      ],
-      generationConfig: {
-        temperature: 0.7,
-        topK: 40,
-        topP: 0.95,
-        maxOutputTokens: 1024,
-      },
-    }),
-  });
+      }),
+    });
 
-  if (!response.ok) {
-    const err = await response.json();
-    throw new Error(err?.error?.message || 'Gemini API error');
+    if (!response.ok) {
+      let errMsg = `HTTP ${response.status}`;
+      try {
+        const err = await response.json();
+        errMsg = err?.error?.message || errMsg;
+      } catch {}
+      throw new Error(errMsg);
+    }
+
+    const data = await response.json();
+    return data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No response from AI.';
+  } catch (error: any) {
+    console.error('Gemini API error:', error);
+    throw error;
   }
-
-  const data = await response.json();
-  return data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No response from AI.';
 }
 
 // Multi-turn chat function
 export async function callGeminiChat(messages: GeminiMessage[]): Promise<string> {
   if (!GEMINI_API_KEY) {
-    return 'Gemini API key not configured. Please add VITE_GEMINI_API_KEY to your .env file.';
+    return '⚠️ Gemini API key not configured.';
   }
 
   const contents = messages.map((msg) => ({
@@ -53,33 +71,42 @@ export async function callGeminiChat(messages: GeminiMessage[]): Promise<string>
     parts: [{ text: msg.content }],
   }));
 
-  const response = await fetch(GEMINI_API_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      contents,
-      generationConfig: {
-        temperature: 0.7,
-        topK: 40,
-        topP: 0.95,
-        maxOutputTokens: 1024,
-      },
-    }),
-  });
+  try {
+    const response = await fetch(getUrl(), {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify({
+        contents,
+        generationConfig: {
+          temperature: 0.7,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: 1024,
+        },
+      }),
+    });
 
-  if (!response.ok) {
-    const err = await response.json();
-    throw new Error(err?.error?.message || 'Gemini API error');
+    if (!response.ok) {
+      let errMsg = `HTTP ${response.status}`;
+      try {
+        const err = await response.json();
+        errMsg = err?.error?.message || errMsg;
+      } catch {}
+      throw new Error(errMsg);
+    }
+
+    const data = await response.json();
+    return data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No response from AI.';
+  } catch (error: any) {
+    console.error('Gemini chat error:', error);
+    throw error;
   }
-
-  const data = await response.json();
-  return data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No response from AI.';
 }
 
-// Specialized functions for InsurAI use cases
+// Specialized functions for InsurAI
 
 export async function analyzePolicy(policyText: string): Promise<string> {
-  const prompt = `You are an expert insurance policy compliance analyst for InsurAI. 
+  const prompt = `You are an expert insurance policy compliance analyst for InsurAI.
 Analyze the following corporate policy document and provide:
 1. Key compliance risks (if any)
 2. Main policy highlights
@@ -98,7 +125,7 @@ export async function recommendPolicies(employeeInfo: {
   department: string;
   coverageNeeds: string[];
 }): Promise<string> {
-  const prompt = `You are an InsurAI policy recommendation engine. 
+  const prompt = `You are an InsurAI policy recommendation engine.
 Based on the following employee profile, recommend the most suitable corporate insurance policies:
 
 Employee Type: ${employeeInfo.type}
