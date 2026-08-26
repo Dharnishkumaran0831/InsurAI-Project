@@ -89,12 +89,13 @@ public class AIController {
     public ResponseEntity<?> getRecommendation(@RequestBody Map<String, Object> request) {
         Map profile = (Map) request.get("profile");
         if (profile == null) {
-            return ResponseEntity.badRequest().body("Profile details are required");
+            profile = request;
         }
 
-        String prompt = "Recommend the best corporate insurance policies for an employee with the following profile: "
+        String prompt = "You are an expert insurance recommendation assistant for InsurAI. "
+                + "Recommend the best corporate insurance policies for an employee with the following profile: "
                 + profile.toString() + ". "
-                + "Suggest exactly two realistic corporate policies. Return a raw JSON array of recommended policies, "
+                + "Suggest 2-3 realistic corporate policies. Return a raw JSON array of recommended policies, "
                 + "where each policy object has exactly these fields: "
                 + "id (integer), name (string), provider (string), coverage (string), premium (string), matchScore (integer 0-100), "
                 + "and features (array of strings). "
@@ -114,8 +115,32 @@ public class AIController {
             return ResponseEntity.ok(parsed);
         } catch (Exception e) {
             System.err.println("JSON parsing failed, returning raw response: " + e.getMessage());
-            return ResponseEntity.ok(geminiResponse);
+            Map<String, Object> res = new HashMap<>();
+            res.put("rawText", geminiResponse);
+            return ResponseEntity.ok(res);
         }
+    }
+
+    @PostMapping("/query")
+    public ResponseEntity<?> answerQuery(@RequestBody Map<String, String> request) {
+        String query = request.getOrDefault("query", "");
+        String context = request.getOrDefault("context", "");
+
+        if (query.trim().isEmpty()) {
+            Map<String, String> err = new HashMap<>();
+            err.put("error", "Query cannot be empty");
+            return ResponseEntity.badRequest().body(err);
+        }
+
+        String prompt = "You are an InsurAI corporate policy assistant helping employees and HR managers. "
+                + (context.isEmpty() ? "" : "Context: " + context + "\n")
+                + "User Question: " + query + "\n\n"
+                + "Provide a helpful, accurate, concise, and professional answer.";
+
+        String answer = geminiService.generateContent(prompt);
+        Map<String, String> response = new HashMap<>();
+        response.put("answer", answer);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/audit-history")

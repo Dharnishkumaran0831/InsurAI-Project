@@ -20,11 +20,11 @@ public class GeminiService {
 
     public String generateContent(String prompt) {
         String key = apiKey;
-        if (key == null || key.isEmpty()) {
+        if (key == null || key.isEmpty() || key.contains("your_gemini_api_key")) {
             key = System.getenv("GEMINI_API_KEY");
         }
 
-        if (key == null || key.isEmpty()) {
+        if (key == null || key.isEmpty() || key.contains("your_gemini_api_key")) {
             System.out.println("WARNING: GEMINI_API_KEY is not set. Returning mock fallback response.");
             return getMockResponseForPrompt(prompt);
         }
@@ -144,6 +144,6 @@ public class GeminiService {
                    "  }\n" +
                    "]";
         }
-        return "{}";
+        return "As an InsurAI Assistant, I am here to help you understand company policies, employee benefits, health insurance coverage, and compliance guidelines. Please let me know if you need specific policy details or assistance!";
     }
 }
