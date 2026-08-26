@@ -11,6 +11,7 @@
 
 ## 🚀 Live Links & Repository
 
+- **Live App URL:** [https://insur-ai-project-peach.vercel.app](https://insur-ai-project-peach.vercel.app)
 - **GitHub Repository:** [https://github.com/Dharnishkumaran0831/InsurAI-Project](https://github.com/Dharnishkumaran0831/InsurAI-Project)
 - **Deploy Setup:**
   - **Vercel (Frontend):** Pre-configured with [`frontend/vercel.json`](file:///d:/InsurAI-Project-main/InsurAI-Project-main/frontend/vercel.json)
