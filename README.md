@@ -63,13 +63,13 @@ Traditional corporate insurance workflows suffer from heavy documentation overhe
 ## 🏗️ System Architecture & Workflow
 
 ```mermaid
-graph TD;
-    User[👤 HR / Employee / Admin] -->|HTTPS Requests| Frontend[🎨 React + Vite Frontend]
-    Frontend -->|JWT Bearer Token| Security[🔒 Spring Security Layer]
-    Security -->|REST API| Controller[⚡ AI & Policy Controllers]
-    Controller -->|Service Layer| GeminiService[🤖 Gemini AI Service Engine]
-    Controller -->|JPA Repositories| DB[(💾 H2 / MySQL Database)]
-    GeminiService -->|Secure HTTPS REST| GoogleAPI[☁️ Google Gemini AI API]
+flowchart TD
+    A["👤 User (HR / Employee / Admin)"] -->|HTTPS Requests| B["🎨 React + Vite Frontend"]
+    B -->|JWT Bearer Token| C["🔒 Spring Security Layer"]
+    C -->|REST API| D["⚡ AI & Policy Controllers"]
+    D -->|Service Layer| E["🤖 Gemini AI Service Engine"]
+    D -->|JPA Repositories| F["💾 H2 / MySQL Database"]
+    E -->|HTTPS REST API| G["☁️ Google Gemini AI"]
 ```
 
 ---
