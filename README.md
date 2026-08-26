@@ -1,183 +1,65 @@
+# 🛡️ InsurAI – Corporate Policy Automation System with Google Gemini AI
 
-🛡️ InsurAI – Corporate Policy Automation System
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/Dharnishkumaran0831/InsurAI-Project)
+[![Spring Boot](https://img.shields.io/badge/Backend-Spring%20Boot%203.5-brightgreen?logo=springboot)](https://spring.io/projects/spring-boot)
+[![React Vite](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-blue?logo=react)](https://reactjs.org/)
+[![Google Gemini AI](https://img.shields.io/badge/AI-Google%20Gemini%20AI-orange?logo=google)](https://aistudio.google.com/)
 
-InsurAI is a full-stack insurance management platform that automates corporate insurance policy creation, validation, claims processing, and renewals using modern web technologies. The system reduces manual effort, improves accuracy, and provides secure role-based access for users, employees, and HR/admins.
+**InsurAI** is an enterprise-grade full-stack insurance platform that automates corporate insurance policy creation, AI-powered compliance auditing, policy recommendation, claims processing, and renewal workflows using **Spring Boot**, **React**, and **Google Gemini AI**.
 
-📌 Problem Statement
+---
 
-In the insurance industry, corporate clients require customized insurance policies involving multiple manual steps such as:
+## 🚀 Live Links & Repository
 
-Policy creation
+- **GitHub Repository:** [https://github.com/Dharnishkumaran0831/InsurAI-Project](https://github.com/Dharnishkumaran0831/InsurAI-Project)
+- **Deploy Setup:**
+  - **Vercel (Frontend):** Pre-configured with [`frontend/vercel.json`](file:///d:/InsurAI-Project-main/InsurAI-Project-main/frontend/vercel.json)
+  - **Render (Full Stack):** Pre-configured with [`render.yaml`](file:///d:/InsurAI-Project-main/InsurAI-Project-main/render.yaml)
 
-Validation & compliance checks
+---
 
-Claim processing
+## 🤖 Google Gemini AI Features
 
-Renewal management
+1. **AI Policy Recommendation Engine (`/policy-recommendation`)**
+   - Generates personalized corporate policy options based on employee profile, department, and coverage requirements using Gemini AI.
+2. **AI Compliance Checker (`/compliance-check`)**
+   - Audits corporate policy documents, detects missing clauses and high-risk conditions, calculates compliance scores (0-100), and records audit history in the backend database.
+3. **Gemini AI Policy Assistant**
+   - Multi-turn AI Assistant panel on HR and Employee dashboards to answer corporate insurance queries instantly.
 
-Traditional systems rely heavily on documentation and human verification, leading to:
+> [!NOTE]
+> **Security First:** The Google Gemini API key is managed securely on the Spring Boot backend via environment variables (`GEMINI_API_KEY`) and is **never exposed** in client-side browser bundles or committed to version control.
 
-Delays
+---
 
-Errors
+## 🏗️ Tech Stack
 
-Inconsistent policy handling
+- **Frontend:** React, TypeScript, Tailwind CSS, Vite, Lucide Icons, Sonner Toasts
+- **Backend:** Java 17+, Spring Boot 3.5, Spring Security, JWT Authentication, Spring Data JPA
+- **Database:** H2 In-Memory (Development) / MySQL 8.0 (Production)
+- **AI Integration:** Google Gemini AI API (v1beta REST)
 
-InsurAI addresses these issues by automating insurance workflows with a secure and scalable architecture.
+---
 
-🎯 Objectives
+## 🛠️ How to Run Locally
 
-Automate corporate insurance policy management
+### 1. Spring Boot Backend
+```bash
+cd backend
+./mvnw spring-boot:run
+```
+- **Backend URL:** `http://localhost:8080`
+- **Environment Variable (Optional):** Set `GEMINI_API_KEY` in terminal if overriding `application.properties`.
 
-Provide secure login and role-based access
+### 2. React Vite Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+- **Frontend URL:** `http://localhost:5173`
 
-Simplify policy application and claim processing
+---
 
-Reduce human errors and processing time
-
-Enable employees to verify and manage policies efficiently
-
-🏗️ System Architecture Frontend (React) ↓ REST API calls Backend (Spring Boot) ↓ JPA / Hibernate Database (MySQL) ↓ JWT Authentication & Authorization
-
-🧑‍💼 User Roles 👤 User
-
-Register & login
-
-Apply for new insurance policies
-
-Upload claim images/documents
-
-View applied and approved policies
-
-👨‍💻 Employee
-
-Login securely
-
-View user policy requests
-
-Verify claims and policies
-
-Update policy status
-
-🛠️ Admin / HR
-
-Manage employees
-
-Monitor system activities
-
-Oversee policies and claims
-
-🔐 Authentication & Security
-
-JWT (JSON Web Token) based authentication
-
-Secure REST APIs
-
-Role-based authorization
-
-Password encryption using BCrypt
-
-Protected routes for employees and users
-
-🛠️ Tech Stack Frontend
-
-React.js
-
-TypeScript
-
-Tailwind CSS
-
-React Router
-
-Axios
-
-Backend
-
-Java
-
-Spring Boot
-
-Spring Security
-
-JWT
-
-JPA / Hibernate
-
-Database
-
-MySQL
-
-Tools
-
-Maven
-
-Git & GitHub
-
-Postman
-
-VS Code
-
-📂 Project Structure InsurAI-Project │ ├── backend │ ├── controller │ ├── service │ ├── repository │ ├── entity │ ├── security │ └── dto │ ├── frontend │ ├── pages │ ├── components │ ├── services │ ├── context │ └── routes │ └── README.md
-
-🔄 Core Features
-
-RESTful API architecture
-
-Secure JWT-based login system
-
-Policy creation and tracking
-
-Claim submission with image upload
-
-Employee verification dashboard
-
-Clean frontend-backend separation
-
-▶️ How to Run the Project Backend (Spring Boot) cd backend mvn clean spring-boot:run
-
-Backend runs on:
-
-http://localhost:8080
-
-Frontend (React) cd frontend npm install npm run dev
-
-Frontend runs on:
-
-http://localhost:4200
-
-🧪 API Testing
-
-Tested using Postman
-
-Endpoints include:
-
-/api/auth/register
-
-/api/auth/login
-
-/api/policies
-
-/api/claims
-
-🚀 Future Enhancements
-
-AI-based policy recommendation system
-
-NLP-powered document verification
-
-Cloud deployment (AWS / Render)
-
-Notification system (Email / SMS)
-
-Advanced analytics dashboard
-
-👨‍🎓 Developer
-
-Pavan Kalyan B.Tech – Computer Science Engineering Business Development Associate Aspiring Full Stack Java Developer
-
-⭐ Conclusion
-
-InsurAI is a secure, scalable, and efficient insurance automation platform that modernizes corporate insurance workflows using Spring Boot, React, REST APIs, and JWT authentication.
-
-Enterprise UI Prototype for InsurAI
-This is a code bundle for Enterprise UI Prototype for InsurAI. The original project is available at https://www.figma.com/design/858qtA2VWcMMCJeW5iGhOh/Enterprise-UI-Prototype-for-InsurAI.
+## 👨‍💻 Developer & Repository
+- **Repository:** [Dharnishkumaran0831/InsurAI-Project](https://github.com/Dharnishkumaran0831/InsurAI-Project)
