@@ -1,66 +1,162 @@
-# 🛡️ InsurAI – Corporate Policy Automation System with Google Gemini AI
+<div align="center">
 
-[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/Dharnishkumaran0831/InsurAI-Project)
-[![Spring Boot](https://img.shields.io/badge/Backend-Spring%20Boot%203.5-brightgreen?logo=springboot)](https://spring.io/projects/spring-boot)
-[![React Vite](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-blue?logo=react)](https://reactjs.org/)
-[![Google Gemini AI](https://img.shields.io/badge/AI-Google%20Gemini%20AI-orange?logo=google)](https://aistudio.google.com/)
+# 🛡️ InsurAI — Corporate Policy Automation & AI Intelligence System
 
-**InsurAI** is an enterprise-grade full-stack insurance platform that automates corporate insurance policy creation, AI-powered compliance auditing, policy recommendation, claims processing, and renewal workflows using **Spring Boot**, **React**, and **Google Gemini AI**.
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://insur-ai-project-peach.vercel.app)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-InsurAI--Project-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Dharnishkumaran0831/InsurAI-Project)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Google Gemini AI](https://img.shields.io/badge/Google_Gemini-AI_Engine-8E75B2?style=for-the-badge&logo=google&logoColor=white)](https://aistudio.google.com/)
 
----
+<p align="center">
+  <b>An enterprise-grade full-stack insurance automation platform powered by Google Gemini AI, Spring Boot, and React.</b>
+  <br />
+  Automates policy recommendations, document compliance audits, employee benefit verification, and claims processing.
+</p>
 
-## 🚀 Live Links & Repository
+[🌐 Visit Live Website](https://insur-ai-project-peach.vercel.app) • [📖 Explore API Docs](#-api-endpoints-reference) • [🚀 Quick Start](#-getting-started)
 
-- **Live App URL:** [https://insur-ai-project-peach.vercel.app](https://insur-ai-project-peach.vercel.app)
-- **GitHub Repository:** [https://github.com/Dharnishkumaran0831/InsurAI-Project](https://github.com/Dharnishkumaran0831/InsurAI-Project)
-- **Deploy Setup:**
-  - **Vercel (Frontend):** Pre-configured with [`frontend/vercel.json`](file:///d:/InsurAI-Project-main/InsurAI-Project-main/frontend/vercel.json)
-  - **Render (Full Stack):** Pre-configured with [`render.yaml`](file:///d:/InsurAI-Project-main/InsurAI-Project-main/render.yaml)
-
----
-
-## 🤖 Google Gemini AI Features
-
-1. **AI Policy Recommendation Engine (`/policy-recommendation`)**
-   - Generates personalized corporate policy options based on employee profile, department, and coverage requirements using Gemini AI.
-2. **AI Compliance Checker (`/compliance-check`)**
-   - Audits corporate policy documents, detects missing clauses and high-risk conditions, calculates compliance scores (0-100), and records audit history in the backend database.
-3. **Gemini AI Policy Assistant**
-   - Multi-turn AI Assistant panel on HR and Employee dashboards to answer corporate insurance queries instantly.
-
-> [!NOTE]
-> **Security First:** The Google Gemini API key is managed securely on the Spring Boot backend via environment variables (`GEMINI_API_KEY`) and is **never exposed** in client-side browser bundles or committed to version control.
+</div>
 
 ---
 
-## 🏗️ Tech Stack
+## 📸 Screenshots Showcase
 
-- **Frontend:** React, TypeScript, Tailwind CSS, Vite, Lucide Icons, Sonner Toasts
-- **Backend:** Java 17+, Spring Boot 3.5, Spring Security, JWT Authentication, Spring Data JPA
-- **Database:** H2 In-Memory (Development) / MySQL 8.0 (Production)
-- **AI Integration:** Google Gemini AI API (v1beta REST)
+<div align="center">
+
+### 🔐 Authentication & Enterprise Dashboard Interface
+![InsurAI Platform Interface](./screenshots/login.png)
+*Figure 1: InsurAI Role-Based Portal featuring JWT Security, AI Compliance Scanner, and Policy Management.*
+
+</div>
 
 ---
 
-## 🛠️ How to Run Locally
+## 🎯 Executive Overview & Problem Statement
 
-### 1. Spring Boot Backend
+Traditional corporate insurance workflows suffer from heavy documentation overhead, manual verification delays, policy mismatching, and compliance oversight risks. 
+
+**InsurAI** modernizes corporate insurance ecosystems by integrating **Google Gemini AI** with a secure Spring Boot microservices backend and a dynamic React frontend.
+
+### Key Value Propositions:
+- ⚡ **Instant AI Policy Recommendation:** Personalizes corporate health, travel, equipment, and life policies in seconds.
+- 🛡️ **Automated Compliance Auditing:** Scans contracts for legal risks, missing clauses, and liability issues with real-time scoring.
+- 🤖 **Interactive AI Assistant:** Answers HR policy questions and employee benefit queries 24/7.
+- 🔒 **Bank-Grade Security:** JWT-based authentication, role-based authorization (HR, Admin, Employee), and server-side secret management.
+
+---
+
+## 🧠 Integrated Google Gemini AI Features
+
+| Feature | Endpoint | Description |
+| :--- | :--- | :--- |
+| **🤖 AI Policy Recommendation Engine** | `POST /api/ai/policy-recommendation` | Analyzes employee department, employment type, and coverage needs to recommend optimal insurance plans. |
+| **🛡️ AI Compliance Checker** | `POST /api/ai/compliance-check` | Scans policy documents for high-risk conditions and missing legal clauses while saving audit logs to database. |
+| **💬 AI Policy Assistant** | `POST /api/ai/query` | Natural language QA engine for HR policy guidance and employee benefit inquiries. |
+
+> [!IMPORTANT]
+> **Zero Key Exposure:** The Google Gemini API key (`GEMINI_API_KEY`) is stored exclusively on the Spring Boot backend server. No API keys are exposed to client-side browser bundles or committed to source control.
+
+---
+
+## 🏗️ System Architecture & Workflow
+
+```mermaid
+graph TD;
+    User[👤 HR / Employee / Admin] -->|HTTPS Requests| Frontend[🎨 React + Vite Frontend]
+    Frontend -->|JWT Bearer Token| Security[🔒 Spring Security Layer]
+    Security -->|REST API| Controller[⚡ AI & Policy Controllers]
+    Controller -->|Service Layer| GeminiService[🤖 Gemini AI Service Engine]
+    Controller -->|JPA Repositories| DB[(💾 H2 / MySQL Database)]
+    GeminiService -->|Secure HTTPS REST| GoogleAPI[☁️ Google Gemini AI API]
+```
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend Architecture
+- **Framework:** React 18 + Vite
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS + Lucide Icons
+- **HTTP Client:** Axios / Fetch API
+- **Notifications:** Sonner Toast Notifications
+
+### Backend Architecture
+- **Framework:** Java 17+ / Spring Boot 3.5
+- **Security:** Spring Security + JWT Authentication
+- **Data Persistence:** Spring Data JPA / Hibernate
+- **Database:** H2 In-Memory (Dev) / MySQL 8.0 (Prod)
+- **Build Tool:** Apache Maven
+
+---
+
+## 📖 API Endpoints Reference
+
+### 🔐 Authentication Controller (`/api/auth`)
+- `POST /api/auth/register` — Register new user account.
+- `POST /api/auth/login` — Authenticate and receive JWT Bearer token.
+
+### 🤖 AI Controller (`/api/ai`)
+- `POST /api/ai/policy-recommendation` — Generate AI policy recommendations.
+- `POST /api/ai/compliance-check` — Analyze document compliance and log audit.
+- `POST /api/ai/query` — Ask Gemini AI Assistant policy questions.
+- `GET /api/ai/audit-history?email={email}` — Retrieve historical compliance audit logs.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- **Node.js:** `v18.0.0` or higher
+- **Java Development Kit (JDK):** `17` or higher
+- **Maven:** `3.8+` (or use `./mvnw` wrapper)
+
+### 1. Run Backend Server
 ```bash
 cd backend
 ./mvnw spring-boot:run
 ```
-- **Backend URL:** `http://localhost:8080`
-- **Environment Variable (Optional):** Set `GEMINI_API_KEY` in terminal if overriding `application.properties`.
+> The backend server starts automatically at `http://localhost:8080`.
 
-### 2. React Vite Frontend
+### 2. Run Frontend Client
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-- **Frontend URL:** `http://localhost:5173`
+> The frontend client starts automatically at `http://localhost:5173`.
 
 ---
 
-## 👨‍💻 Developer & Repository
+## 🌐 Deployment Configuration
+
+- **Frontend Deployment (Vercel):** Pre-configured with [`vercel.json`](file:///d:/InsurAI-Project-main/InsurAI-Project-main/vercel.json)
+- **Full-Stack Deployment (Render):** Pre-configured with [`render.yaml`](file:///d:/InsurAI-Project-main/InsurAI-Project-main/render.yaml)
+
+Live Web App: **[https://insur-ai-project-peach.vercel.app](https://insur-ai-project-peach.vercel.app)**
+
+---
+
+## 👨‍💻 Developer & Contributions
+
+Developed with ❤️ by **Dharnishkumaran** and contributors.
+
+- **Lead Developer:** [Dharnishkumaran0831](https://github.com/Dharnishkumaran0831)
 - **Repository:** [Dharnishkumaran0831/InsurAI-Project](https://github.com/Dharnishkumaran0831/InsurAI-Project)
+
+### 🤝 How to Contribute
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+<div align="center">
+
+⭐ **If you find InsurAI useful, please give the repository a star on GitHub!** ⭐
+
+</div>
