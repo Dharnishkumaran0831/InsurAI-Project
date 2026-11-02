@@ -1,0 +1,19 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# Code and configuration file types
+*.ts text
+*.tsx text
+*.js text
+*.jsx text
+*.json text
+*.css text
+*.html text
+*.md text diff=markdown
+
+# Assets and binaries
+*.ico binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.svg text
