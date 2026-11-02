@@ -130,6 +130,19 @@ npm run dev
 
 ---
 
+## 🧩 Modular Client Architecture & Utilities
+
+InsurAI's frontend architecture includes dedicated domain services, custom hooks, and reactive UI components:
+
+- **📊 Analytics & KPI Dashboard:** `frontend/src/components/ClaimMetricCard.tsx` and `StatusBadge.tsx` for real-time telemetry metrics.
+- **💰 Premium Discount Engine:** `frontend/src/services/discountCalculator.ts` evaluates no-claim bonuses and wellness incentives.
+- **⚖️ Policy Risk Analyzer:** `frontend/src/services/riskCalculator.ts` computes risk classifications across age, coverage, and claim history.
+- **📄 Form Validation Helpers:** `frontend/src/services/policyValidator.ts` ensures clean claim submissions.
+- **⚡ Client-Side Hooks:** `usePagination` for catalog browsing, `useDebounce` for responsive policy filtering, and `useLocalStorage` for claim draft persistence.
+- **🔒 Edge Security & SEO:** Pre-configured HTTP response headers (`frontend/public/_headers`), `robots.txt`, and `sitemap.xml`.
+
+---
+
 ## 🌐 Deployment Configuration
 
 - **Frontend Deployment (Vercel):** Pre-configured with [`vercel.json`](file:///d:/InsurAI-Project-main/InsurAI-Project-main/vercel.json)
