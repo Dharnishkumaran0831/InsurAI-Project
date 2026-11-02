@@ -16,3 +16,10 @@ build/
 # IDE
 .vscode/
 .idea/
+
+# Deployments & Logs
+.vercel/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
